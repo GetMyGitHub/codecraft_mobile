@@ -1,8 +1,6 @@
-import 'package:codecraft_mobile/service/service_api_provider.dart';
+import 'package:codecraft_mobile/service/core/service_core.dart';
 
-class BaseService {
-
-  ApiProviderService apiProviderService = ApiProviderService();
+class BaseService extends CoreService {
 
   login(String username, String password) async {
     var test = await apiProviderService.doPost({'username': username, 'password': password});
