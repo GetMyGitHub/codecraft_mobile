@@ -1,35 +1,67 @@
-import 'package:codecraft_mobile/screens/screen_login.dart';
+import 'package:codecraft_mobile/pages/home.dart';
+import 'package:codecraft_mobile/pages/login.dart';
 import 'package:flutter/material.dart';
 
-import 'screen_home.dart';
-
 void main() {
-  runApp(const MyApp());
+  runApp(const MainPage());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  bool lightTheme = true;
+  bool userConnected = false;
+
+  void updateState(bool pUserConnected) {
+    setState(() {
+      userConnected = pUserConnected;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    return const ScreenLogin();
-    //   MaterialApp(
-    //   debugShowCheckedModeBanner: true,
-    //   home: Scaffold(
-    //     appBar: AppBar(
-    //       title: const Text("Codecraft"),
-    //       backgroundColor: Colors.blueAccent,
-    //     ),
-    //     body: const Center(
-    //         child: Text(
-    //             "Bienvenue sur l'appli du salon...",
-    //           style: TextStyle(
-    //             fontSize: 24,
-    //           ),
-    //         )
-    //     ),
-    //   ),
-    // );
-
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: lightTheme ? ThemeData.light() : ThemeData.dark(),
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.teal,
+          title: const Text(
+            "CodeCraft",
+            style: TextStyle(fontSize: 30),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.account_box,
+                size: 30,
+              ),
+              onPressed: () {
+                userConnected
+                    ? setState(() => userConnected = false)
+                    : setState(() => userConnected = true);
+              },
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.thermostat,
+                size: 30,
+              ),
+              onPressed: () {
+                lightTheme
+                    ? setState(() => lightTheme = false)
+                    : setState(() => lightTheme = true);
+              },
+            ),
+          ],
+        ),
+        body: userConnected ? const HomePage() : const LoginPage(),
+      ),
+    );
   }
 }
