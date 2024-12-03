@@ -27,10 +27,17 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: lightTheme ? ThemeData.light() : ThemeData.dark(),
+      // theme: lightTheme ? ThemeData.light() : ThemeData.dark(),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.cyan,
+            brightness: lightTheme ? Brightness.light : Brightness.dark),
+        // appBarTheme: const AppBarTheme(backgroundColor: Colors.cyan)
+      ),
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.teal,
+          // backgroundColor: Colors.teal,
           title: const Text(
             "CodeCraft",
             style: TextStyle(fontSize: 30),
