@@ -1,6 +1,7 @@
 import 'package:codecraft_mobile/pages/home.dart';
 import 'package:codecraft_mobile/pages/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(const MainPage());
@@ -8,67 +9,83 @@ void main() {
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
-
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  bool lightTheme = true;
-  bool userConnected = false;
+  bool _lightTheme = true;
 
-  void updateState(bool pUserConnected) {
+  void updateThemeState(bool lightTheme) {
     setState(() {
-      userConnected = pUserConnected;
+      _lightTheme = lightTheme;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // theme: lightTheme ? ThemeData.light() : ThemeData.dark(),
+      title: 'Flutter Demo',
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
-        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.cyan,
-            brightness: lightTheme ? Brightness.light : Brightness.dark),
-        // appBarTheme: const AppBarTheme(backgroundColor: Colors.cyan)
+            seedColor: Colors.cyanAccent,
+            brightness: _lightTheme ? Brightness.light : Brightness.dark),
+        useMaterial3: true,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          // backgroundColor: Colors.teal,
-          title: const Text(
-            "CodeCraft",
-            style: TextStyle(fontSize: 30),
+      home: TemplatePage(
+          lightTheme: _lightTheme, themeCallback: updateThemeState),
+    );
+  }
+}
+
+class TemplatePage extends StatefulWidget {
+  const TemplatePage(
+      {super.key, required this.lightTheme, required this.themeCallback});
+
+  final bool lightTheme;
+  final Function themeCallback;
+
+  @override
+  State<TemplatePage> createState() => _TemplatePageState();
+}
+
+class _TemplatePageState extends State<TemplatePage> {
+  bool _userConnected = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(AppLocalizations.of(context)!.applicationName),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.account_box,
+              size: 30,
+            ),
+            onPressed: () {
+              _userConnected
+                  ? setState(() => _userConnected = false)
+                  : setState(() => _userConnected = true);
+            },
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.account_box,
-                size: 30,
-              ),
-              onPressed: () {
-                userConnected
-                    ? setState(() => userConnected = false)
-                    : setState(() => userConnected = true);
-              },
+          IconButton(
+            icon: const Icon(
+              Icons.thermostat,
+              size: 30,
             ),
-            IconButton(
-              icon: const Icon(
-                Icons.thermostat,
-                size: 30,
-              ),
-              onPressed: () {
-                lightTheme
-                    ? setState(() => lightTheme = false)
-                    : setState(() => lightTheme = true);
-              },
-            ),
-          ],
-        ),
-        body: userConnected ? const HomePage() : const LoginPage(),
+            onPressed: () {
+              widget.lightTheme
+                  ? setState(() => widget.themeCallback(false))
+                  : setState(() => widget.themeCallback(true));
+            },
+          ),
+        ],
       ),
+      body: _userConnected ? const HomePage() : const LoginPage(),
     );
   }
 }
