@@ -1,5 +1,7 @@
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../services/base/service_base.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,6 +12,17 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+
+  void _login() async {
+    BaseService baseService = BaseService();
+    var login = await baseService.login("admin", "admin");
+    var test = await baseService.test();
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Processing Data')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +38,13 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               margin: const EdgeInsets.all(10.0),
               child: TextFormField(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Url du serveur",
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: AppLocalizations.of(context)!.loginUrlLabel,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
+                    return AppLocalizations.of(context)!.loginUrlIsEmpty;
                   }
                   return null;
                 },
@@ -39,21 +52,33 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Container(
               margin: const EdgeInsets.all(10.0),
-              child: const TextField(
+              child: TextFormField(
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Nom d'utilisateur",
+                  border: const OutlineInputBorder(),
+                  labelText: AppLocalizations.of(context)!.loginUserLabel,
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return AppLocalizations.of(context)!.loginUserIsEmpty;
+                  }
+                  return null;
+                },
               ),
             ),
             Container(
               margin: const EdgeInsets.all(10.0),
-              child: const TextField(
+              child: TextFormField(
                 obscureText: true,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Mot de passe",
+                  border: const OutlineInputBorder(),
+                  labelText: AppLocalizations.of(context)!.loginPasswordLabel,
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return AppLocalizations.of(context)!.loginPasswordIsEmpty;
+                  }
+                  return null;
+                },
               ),
             ),
             Container(
@@ -64,14 +89,8 @@ class _LoginPageState extends State<LoginPage> {
                     shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 )),
-                child: const Text("Connexion"),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processing Data')),
-                    );
-                  }
-                },
+                child: Text(AppLocalizations.of(context)!.loginConnexionLabel),
+                onPressed: () => _login(),
               ),
             ),
           ],

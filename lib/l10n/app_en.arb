@@ -1,3 +1,10 @@
 {
-  "applicationName": "CodeCraft"
+  "applicationName": "CodeCraft",
+  "loginUrlLabel": "Url du serveur",
+  "loginUserLabel": "Username",
+  "loginPasswordLabel": "Password",
+  "loginConnexionLabel": "Login",
+  "loginUrlIsEmpty": "Please enter a valid url",
+  "loginUserIsEmpty": "Please enter an username",
+  "loginPasswordIsEmpty": "Please enter a password"
 }
